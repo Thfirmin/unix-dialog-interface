@@ -1,0 +1,82 @@
+#!/bin/bash
+
+source dialog_utils.sh
+
+lib_test() {
+	function_id=$1; shift
+	function_exec=$1; shift
+
+	case "$function_id" in
+		"gauge")
+			simular_processo_longo | $function_exec $@	
+			;;
+		"mixedgauge")
+			mgauge_task_queue=(
+				"simular_processo_longo 0.5 5"	
+				"simular_processo_longo 1 2"
+				"simular_processo_longo 0.5 3"
+				"simular_processo_longo 2 9"
+			)
+			mgauge_task_id=(
+				"Task 1"
+				"Task 2"
+				"Task 3"
+				"Task 4"
+			)
+
+			$function_exec $@
+			;;
+		*)
+			$function_exec $@
+			;;
+	esac	
+
+	echo "${function_id}[$DIALOG_RETURN]: [$DIALOG_ANSWER]" >> tracing.log
+
+	clear
+}
+
+simular_processo_longo() {
+	time_sleep=${1-1}
+	status_return=${2-0}
+    
+	# Simulação de um processo longo
+    for i in {1..10}; do
+        sleep $time_sleep
+        echo $((i * 10))
+    done
+
+	return $status_return
+}
+
+> tracing.log
+
+declare -A test_execs=(
+	[yesno]='lib_test yesno dialog_yesno'
+	[buildlist]='lib_test buildlist dialog_buildlist'
+	[calendar]='lib_test calendar dialog_calendar'
+	[checklist]='lib_test checklist dialog_checklist'
+	[dselect]='lib_test dselect dialog_dselect'
+	[editbox]='lib_test editbox dialog_editbox'
+	[form]='lib_test form dialog_form'
+	[fselect]='lib_test fselect dialog_fselect'
+	[gauge]='lib_test gauge dialog_gauge'
+	[infobox]='lib_test infobox dialog_infobox'
+	[inputbox]='lib_test inputbox dialog_inputbox'
+	[inputmenu]='lib_test inputmenu dialog_inputmenu'
+	[menu]='lib_test menu dialog_menu'
+	[mixedform]='lib_test mixedform dialog_mixedform'
+	[mixedgauge]='lib_test mixedgauge dialog_mixedgauge'
+	[msgbox]='lib_test msgox dialog_msgbox'
+	[passwordbox]='lib_test passwordbox dialog_passwordbox'
+)
+
+exec_cmd=$1; shift
+
+if [ -z "$exec_cmd" ]; then
+	for id in "${!test_execs[@]}"; do
+		${test_execs[$id]}
+	done
+else
+	${test_execs[$exec_cmd]} $@
+fi
