@@ -78,5 +78,50 @@ if [ -z "$exec_cmd" ]; then
 		${test_execs[$id]}
 	done
 else
-	${test_execs[$exec_cmd]} $@
+	case "$exec_cmd" in
+		"--help")
+			echo "Dialog interface utils use example:"
+			echo "Usage: $0 [ command [ ...args ] ]"
+			echo "Box options parameters:"
+  			echo -e "\tyesno        <text> <height> <width>"
+  			echo -e "\tbuildlist    <text> <height> <width> <list-height> <tag1> <item1> <status1>..."
+  			echo -e "\tcalendar     <text> <height> <width> <day> <month> <year>"
+  			echo -e "\tchecklist    <text> <height> <width> <list height> <tag1> <item1> <status1>..."
+  			echo -e "\tdselect      <directory> <height> <width>"
+  			echo -e "\teditbox      <file> <height> <width>"
+  			echo -e "\tform         <text> <height> <width> <form height> <label1> <l_y1> <l_x1> <item1> <i_y1> <i_x1> <flen1> <ilen1>..."
+  			echo -e "\tfselect      <filepath> <height> <width>"
+  			echo -e "\tgauge        <text> <height> <width> [<percent>]"
+  			echo -e "\tinfobox      <text> <height> <width>"
+  			echo -e "\tinputbox     <text> <height> <width> [<init>]"
+  			echo -e "\tinputmenu    <text> <height> <width> <menu height> <tag1> <item1>..."
+  			echo -e "\tmenu         <text> <height> <width> <menu height> <tag1> <item1>..."
+  			echo -e "\tmixedform    <text> <height> <width> <form height> <label1> <l_y1> <l_x1> <item1> <i_y1> <i_x1> <flen1> <ilen1> <itype>..."
+  			echo -e "\tmixedgauge   <text> <height> <width> <percent> <tag1> <item1>..."
+  			echo -e "\tmsgbox       <text> <height> <width>"
+  			echo -e "\tpasswordbox  <text> <height> <width> [<init>]"
+  			#echo -e "\t--passwordform <text> <height> <width> <form height> <label1> <l_y1> <l_x1> <item1> <i_y1> <i_x1> <flen1> <ilen1>..."
+  			#echo -e "\t--pause        <text> <height> <width> <seconds>"
+  			#echo -e "\t--prgbox       <text> <command> <height> <width>"
+  			#echo -e "\t--programbox   <text> <height> <width>"
+  			#echo -e "\t--progressbox  <text> <height> <width>"
+  			#echo -e "\t--radiolist    <text> <height> <width> <list height> <tag1> <item1> <status1>..."
+  			#echo -e "\t--rangebox     <text> <height> <width> <min-value> <max-value> <default-value>"
+  			#echo -e "\t--tailbox      <file> <height> <width>"
+  			#echo -e "\t--tailboxbg    <file> <height> <width>"
+  			#echo -e "\t--textbox      <file> <height> <width>"
+  			#echo -e "\t--timebox      <text> <height> <width> <hour> <minute> <second>"
+  			#echo -e "\t--treeview     <text> <height> <width> <list-height> <tag1> <item1> <status1> <depth1>..."
+			;;
+		"--version")
+			echo "Dialog interface use example 1.0"
+			echo "Author: Thiago F. dos S. (Thino Tsukimichi)"
+			echo "Copyright (C) 2024 Free Software Foundation, Inc."
+			echo "This is free software; see the source for copying conditions.  There is NO"
+			echo "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+			;;
+		*)
+			${test_execs[$exec_cmd]} $@
+			;;
+	esac
 fi
